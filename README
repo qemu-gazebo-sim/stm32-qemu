@@ -12,8 +12,9 @@ Prerequisites - On a fresh install of Ubuntu 20.04, the following command will i
     sudo apt-get install build-essential python zlib1g-dev libglib2.0-dev libpixman-1-dev libtool libfdt-dev
 
 Commands for a typical build:
-    ./configure --enable-debug --disable-xen --disable-werror --target-list="arm-softmmu"
-    make
+    mkdir build 
+    ../configure --enable-debug --disable-xen --disable-werror --target-list="arm-softmmu"
+    make -j
 
 Useful make commands when rebuilding:
     make defconfig
