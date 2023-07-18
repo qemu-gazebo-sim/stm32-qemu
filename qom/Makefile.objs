@@ -1,3 +1,25 @@
 common-obj-y = object.o container.o qom-qobject.o
 common-obj-y += cpu.o
 common-obj-y += object_interfaces.o
+common-obj-y += cros_api_call.o
+common-obj-y += cros_api.o
+common-obj-y += cros_clock.o
+common-obj-y += cros_err_codes.o
+common-obj-y += cros_gentools.o
+common-obj-y += cros_log.o
+common-obj-y += cros_message.o cros_err_codes.o
+common-obj-y += cros_message_queue.o
+common-obj-y += cros_node_api.o
+common-obj-y += cros_node.o
+common-obj-y += cros_service.o cros_message.o cros_err_codes.o
+common-obj-y += cros_tcpros.o
+common-obj-y += dyn_buffer.o
+common-obj-y += dyn_string.o
+common-obj-y += md5.o
+common-obj-y += tcpip_socket.o
+common-obj-y += tcpros_process.o
+common-obj-y += xmlrpc_params.o dyn_string.o xmlrpc_params_vector.o
+common-obj-y += xmlrpc_params_vector.o
+common-obj-y += xmlrpc_process.o
+common-obj-y += xmlrpc_protocol.o
+
