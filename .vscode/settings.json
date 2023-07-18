@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "main-loop.h": "c",
+        "sockets.h": "c"
+    },
+    "debug.onTaskErrors": "debugAnyway",
+}
