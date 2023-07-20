@@ -119,6 +119,8 @@ int main(int argc, char **argv)
 #include "qom/object_interfaces.h"
 #include "qapi-event.h"
 
+#include "qom/cros.h"
+
 #define DEFAULT_RAM_SIZE 128
 
 #define MAX_VIRTIO_CONSOLES 1
@@ -182,6 +184,10 @@ static bool boot_strict;
 uint8_t *boot_splash_filedata;
 size_t boot_splash_filedata_size;
 uint8_t qemu_extra_params_fw[2];
+const char *qtest_chrdev_c = NULL;
+const char *optarg_c;
+CharDriverState *chr_aaaa;
+// const char *optarg;
 
 typedef struct FWBootEntry FWBootEntry;
 
@@ -1993,10 +1999,232 @@ static bool main_loop_should_exit(void)
     return false;
 }
 
+/** --------------------------- ROS ------------------------------- */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <unistd.h>
+#include <errno.h>
+#include <signal.h>
+
+#define DIR_SEPARATOR_STR "/"
+
+#include "qom/cros.h"
+// #include "tests/libqtest.h"
+
+#define ROS_MASTER_PORT 11311
+#define ROS_MASTER_ADDRESS "127.0.0.1"
+
+CrosNode * node;                    //! Pointer to object storing the ROS node. This object includes all the ROS node state variables
+static unsigned char exit_flag = 0; //! ROS node loop exit flag. When set to 1 the cRosNodeStart() function exits
+
+
+// This callback will be invoked when the service provider receives a service call
+static CallbackResponse callback_range(cRosMessage * message, void* data_context) {
+    cRosMessageField * range_field = cRosMessageGetField(message, "data");
+    static int32_t range = 0;
+    // printf("entrei na callback_range");
+    if (range_field != NULL) {
+        int32_t new_range = range_field->data.as_int32;
+        if (new_range != range) {
+            ROS_INFO(node, "I heard: [%d]\n", range);
+            // DeviceState *dev;
+            // qemu_irq irq;
+            // unsigned n, level;
+            // const char word_1[] = "/machine/stm32/gpio[b]";
+            // // const char word_2[] = '9';
+            // // const char word_3[] = (new_range > 0) ? "raise": "lower";
+
+            // g_assert(word_1);
+            // dev = DEVICE(object_resolve_path(word_1, NULL));
+
+            // // g_assert(word_2);
+            // // n = strtoul(word_2, NULL, 0);
+            // irq = qdev_get_gpio_in(dev, 9);
+
+            // // g_assert(&word_3);
+            // if (new_range == 0) {
+            //     level = 0;
+            // } else {
+            //     level = 1;
+            // }
+            // qemu_set_irq(irq, level);
+            // set_irq_in("/machine/stm32/gpio[a]", 0, 1);
+            gchar **words1;
+            gchar **words2;
+            words1 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 9 lower", " ", 0);
+            words2 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 9 raise", " ", 0);
+            // if (range == 0) {
+            //     gchar words[][] = {"set_irq_in","/machine/stm32/gpio[a]","lower"};
+            // } else {
+            //     gchar words[][] = {"set_irq_in","/machine/stm32/gpio[a]","raise"};
+            // }
+            // qtest_process_command(chr, words);
+            (new_range == 0) ? qtest_process_command(chr_aaaa, words1) : qtest_process_command(chr_aaaa, words2);
+            range = new_range; 
+            // CharDriverState *chr;
+            // qtest_send(chr, "OK\n");
+        }
+        // ROS_INFO(node, "I heard: [%d]\n", range);
+    }
+
+    return 0;  // 0=success
+}
+
+struct sigaction old_int_signal_handler, old_term_signal_handler;  //! Structures codifying the original handlers of SIGINT and SIGTERM signals (e.g. used when pressing Ctrl-C for the second time);
+
+// This callback function will be called when the main process receives a SIGINT or
+// SIGTERM signal.
+// Function set_signal_handler() should be called to set this function as the handler of
+// these signals
+static void exit_deamon_handler(int sig) {
+    printf("Signal %i received: exiting safely.\n", sig);
+    sigaction(SIGINT, &old_int_signal_handler, NULL);
+    sigaction(SIGTERM, &old_term_signal_handler, NULL);
+    exit_flag = 1;  // Indicate the exit of cRosNodeStart loop (safe exit)
+}
+
+// Sets the signal handler functions of SIGINT and SIGTERM: exit_deamon_handler
+static int set_signal_handler(void) {
+    int ret;
+    struct sigaction act;
+
+    memset(&act, '\0', sizeof(act));
+
+    act.sa_handler = exit_deamon_handler;
+
+    // If the signal handler is invoked while a system call or library function call is blocked,
+    // then the we want the call to be automatically restarted after the signal handler returns
+    // instead of making the call fail with the error EINTR.
+    act.sa_flags = SA_RESTART;
+
+    if ((sigaction(SIGINT, &act,
+                   &old_int_signal_handler) == 0) && (sigaction(SIGTERM, &act, &old_term_signal_handler) == 0)) {
+        ret = 0;
+    } else {
+        ret = errno;
+        printf("Error setting termination signal handler. errno=%d\n", ret);
+    }
+
+    return (ret);
+}
+
+
+int main_loop_ros() {
+
+    // DeviceState *dev;
+    // NamedGPIOList *ngl;
+    // int id;
+
+    // const char word_1[] = "/machine/stm32/gpio[b]";
+    // // const char word_2[] = '9';
+
+    // g_assert(word_1);
+    // dev = DEVICE(object_resolve_path(word_1, NULL));
+
+    // // g_assert(word_2);
+    // id = 9; // strtoul(word_2, NULL, 0);
+
+    // QLIST_FOREACH(ngl, &dev->gpios, node) {
+    //     /* We don't support intercept of named GPIOs yet */
+    //     if (ngl->name) {
+    //         continue;
+    //     }
+    //     // if (words[0][14] == 'o') {
+    //     //     qemu_irq_intercept_out(&ngl->out, qtest_irq_handler,
+    //     //                             id, ngl->num_out);
+    //     // } else {
+    //         qemu_irq_intercept_in(ngl->in, qtest_irq_handler,
+    //                                 id, ngl->num_in);
+    //     // }
+    // }
+
+
+    char path[4097];  // We need to tell our node where to find the .msg files that we'll be using
+    const char * node_name;
+    int subidx;  // Index (identifier) of the created subscriber
+    cRosErrCodePack err_cod;
+
+    node_name = "/dd";  // Default node name if no command-line parameters are specified
+
+    getcwd(path, sizeof(path));
+    strncat(path, DIR_SEPARATOR_STR "rosdb", sizeof(path) - strlen(path) - 1);
+
+    printf("Using the following path for message definitions: %s\n", path);
+
+    // Create a new node and tell it to connect to roscore in the usual place
+    node = cRosNodeCreate(node_name, ROS_MASTER_ADDRESS, ROS_MASTER_ADDRESS, ROS_MASTER_PORT, path);
+
+    if (node == NULL) {
+        printf("cRosNodeCreate() failed; is this program already being run?");
+        return EXIT_FAILURE;
+    }
+
+    err_cod = cRosWaitPortOpen(ROS_MASTER_ADDRESS, ROS_MASTER_PORT, 0);
+
+    if (err_cod != CROS_SUCCESS_ERR_PACK) {
+        cRosPrintErrCodePack(err_cod, "Port %s:%hu cannot be opened: ROS Master does not seems to be running",
+                             ROS_MASTER_ADDRESS, ROS_MASTER_PORT);
+        return EXIT_FAILURE;
+    }
+
+    // Create a service provider named /sum of type "roscpp_tutorials/TwoInts" and supply a callback for received calls
+    // err_cod = cRosApiRegisterSubscriber(node, "/chatter", "std_msgs/String", callback_sub, NULL, NULL, 0, &subidx);
+    err_cod = cRosApiRegisterSubscriber(node, "/range/distance_sensor", "std_msgs/Int32", callback_range, NULL, NULL, 0,
+                                        &subidx);
+
+    if (err_cod != CROS_SUCCESS_ERR_PACK) {
+        cRosPrintErrCodePack(err_cod,
+                             "cRosApiRegisterServiceProvider() failed; did you run this program one directory above 'rosdb'?");
+        cRosNodeDestroy(node);
+        return EXIT_FAILURE;
+    }
+
+    ROS_INFO(node, "Node %s created with XMLRPC port: %i, TCPROS port: %i and RPCROS port: %i\n", node->name,
+             node->xmlrpc_port, node->tcpros_port, node->rpcros_port);
+
+    // Function exit_deamon_handler() will be called when Ctrl-C is pressed or kill is executed
+    set_signal_handler();
+
+    // Run the main loop until exit_flag is 1
+    err_cod = cRosNodeStart(node, CROS_INFINITE_TIMEOUT, &exit_flag);
+
+    if (err_cod != CROS_SUCCESS_ERR_PACK) {
+        cRosPrintErrCodePack(err_cod, "cRosNodeStart() returned an error code");
+    }
+
+    // Free memory and unregister
+    err_cod = cRosNodeDestroy(node);
+
+    if (err_cod != CROS_SUCCESS_ERR_PACK) {
+        cRosPrintErrCodePack(err_cod, "cRosNodeDestroy() failed; Error unregistering from ROS master");
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+#include <pthread.h>
+
+static void *thread_1() {
+    main_loop_ros();
+
+    return NULL;
+}
+
+/**-----------------------------------------------------------------*/
+
+
 static void main_loop(void)
 {
+    // ps_init();
+    pthread_t thread;
+    pthread_create(&thread, NULL, thread_1, NULL);
+
     bool nonblocking;
     int last_io = 0;
+    
 #ifdef CONFIG_PROFILER
     int64_t ti;
 #endif
@@ -2374,7 +2602,7 @@ static int fsdev_init_func(QemuOpts *opts, void *opaque)
 
 static int mon_init_func(QemuOpts *opts, void *opaque)
 {
-    CharDriverState *chr;
+    // CharDriverState *chr_aaaa;
     const char *chardev;
     const char *mode;
     int flags;
@@ -2399,14 +2627,14 @@ static int mon_init_func(QemuOpts *opts, void *opaque)
         flags |= MONITOR_IS_DEFAULT;
 
     chardev = qemu_opt_get(opts, "chardev");
-    chr = qemu_chr_find(chardev);
-    if (chr == NULL) {
+    chr_aaaa = qemu_chr_find(chardev);
+    if (chr_aaaa == NULL) {
         fprintf(stderr, "chardev \"%s\" not found\n", chardev);
         exit(1);
     }
 
-    qemu_chr_fe_claim_no_fail(chr);
-    monitor_init(chr, flags);
+    qemu_chr_fe_claim_no_fail(chr_aaaa);
+    monitor_init(chr_aaaa, flags);
     return 0;
 }
 
@@ -3877,6 +4105,7 @@ int main(int argc, char **argv, char **envp)
                 }
             case QEMU_OPTION_qtest:
                 qtest_chrdev = optarg;
+                // qtest_chrdev_c = qtest_chrdev;
                 break;
             case QEMU_OPTION_qtest_log:
                 qtest_log = optarg;
@@ -3934,6 +4163,7 @@ int main(int argc, char **argv, char **envp)
 
     opts = qemu_get_machine_opts();
     optarg = qemu_opt_get(opts, "type");
+    optarg_c = optarg;
     if (optarg) {
         machine_class = machine_parse(optarg);
     }

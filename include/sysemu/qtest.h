@@ -28,6 +28,7 @@ bool qtest_driver(void);
 
 int qtest_init_accel(MachineClass *mc);
 void qtest_init(const char *qtest_chrdev, const char *qtest_log, Error **errp);
+void qtest_process_command(CharDriverState *chr, gchar **words);
 
 static inline int qtest_available(void)
 {
