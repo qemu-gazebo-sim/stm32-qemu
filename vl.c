@@ -2021,14 +2021,14 @@ static unsigned char exit_flag = 0; //! ROS node loop exit flag. When set to 1 t
 
 
 // This callback will be invoked when the service provider receives a service call
-static CallbackResponse callback_range(cRosMessage * message, void* data_context) {
+static CallbackResponse callback_input_0(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
     // printf("entrei na callback_range");
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
-            ROS_INFO(node, "I heard: [%d]\n", range);
+            ROS_INFO(node, "I heard gpio[b] 9: [%d]\n", range);
 
             gchar **words1;
             gchar **words2;
@@ -2044,27 +2044,129 @@ static CallbackResponse callback_range(cRosMessage * message, void* data_context
     return 0;
 }
 
-    static CallbackResponse callback_pub(cRosMessage *message, void* data_context){
-          char buf[1024];
-          cRosMessageField *data_field;
-          data_field = cRosMessageGetField(message, "data");
-            uint64_t value;
-            uint32_t data;
-            cpu_physical_memory_read(0x40010c00 + 0x08, &data, 4);
-            value = data;// tswap32(data);
-        //   data_field.name = "data";
+static CallbackResponse callback_input_1(cRosMessage * message, void* data_context) {
+    cRosMessageField * range_field = cRosMessageGetField(message, "data");
+    static int32_t range = 0;
+    // printf("entrei na callback_range");
+    if (range_field != NULL) {
+        int32_t new_range = range_field->data.as_int32;
+        if (new_range != range) {
+            ROS_INFO(node, "I heard gpio[b] 8: [%d]\n", range);
+
+            gchar **words1;
+            gchar **words2;
+            words1 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 8 lower", " ", 0);
+            words2 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 8 raise", " ", 0);
+
+            (new_range == 0) ? qtest_process_command(chr_aaaa, words1) : qtest_process_command(chr_aaaa, words2);
+            range = new_range; 
+
+        }
+    }
+
+    return 0;
+}
+
+static CallbackResponse callback_input_2(cRosMessage * message, void* data_context) {
+    cRosMessageField * range_field = cRosMessageGetField(message, "data");
+    static int32_t range = 0;
+    // printf("entrei na callback_range");
+    if (range_field != NULL) {
+        int32_t new_range = range_field->data.as_int32;
+        if (new_range != range) {
+            ROS_INFO(node, "I heard gpio[b] 7: [%d]\n", range);
+
+            gchar **words1;
+            gchar **words2;
+            words1 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 7 lower", " ", 0);
+            words2 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 7 raise", " ", 0);
+
+            (new_range == 0) ? qtest_process_command(chr_aaaa, words1) : qtest_process_command(chr_aaaa, words2);
+            range = new_range; 
+
+        }
+    }
+
+    return 0;
+}
+
+static CallbackResponse callback_input_3(cRosMessage * message, void* data_context) {
+    cRosMessageField * range_field = cRosMessageGetField(message, "data");
+    static int32_t range = 0;
+    // printf("entrei na callback_range");
+    if (range_field != NULL) {
+        int32_t new_range = range_field->data.as_int32;
+        if (new_range != range) {
+            ROS_INFO(node, "I heard gpio[b] 6: [%d]\n", range);
+
+            gchar **words1;
+            gchar **words2;
+            words1 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 6 lower", " ", 0);
+            words2 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 6 raise", " ", 0);
+
+            (new_range == 0) ? qtest_process_command(chr_aaaa, words1) : qtest_process_command(chr_aaaa, words2);
+            range = new_range; 
+
+        }
+    }
+
+    return 0;
+}
+
+static CallbackResponse callback_input_4(cRosMessage * message, void* data_context) {
+    cRosMessageField * range_field = cRosMessageGetField(message, "data");
+    static int32_t range = 0;
+    // printf("entrei na callback_range");
+    if (range_field != NULL) {
+        int32_t new_range = range_field->data.as_int32;
+        if (new_range != range) {
+            ROS_INFO(node, "I heard gpio[b] 5: [%d]\n", range);
+
+            gchar **words1;
+            gchar **words2;
+            words1 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 5 lower", " ", 0);
+            words2 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 5 raise", " ", 0);
+
+            (new_range == 0) ? qtest_process_command(chr_aaaa, words1) : qtest_process_command(chr_aaaa, words2);
+            range = new_range; 
+
+        }
+    }
+
+    return 0;
+}
+
+    static CallbackResponse callback_output_0(cRosMessage *message, void* data_context){
+        char buf[1024];
+        cRosMessageField *data_field;
+        data_field = cRosMessageGetField(message, "data");
+        uint64_t value;
+        uint32_t data;
+        cpu_physical_memory_read(0x40011000 + 0x0c, &data, 4);
+        value = (data >> 13) & 0b1;
         char str[20];
         sprintf(str, "%d", value);
-          data_field->data.as_string = str;
-        // data_field->data.as_msg = 1;
-          cRosMessageSetFieldValueString(&data_field, buf);
+        data_field->data.as_string = str;
 
-        // gchar **words3;
-        // words3 = g_strsplit("readl 0x40010808", " ", 0);
-        // qtest_process_command(chr_aaaa, words3);
-        //   uint32_t value = readl(0x40010800 + 0x08);
-        //   ROS_INFO(node, "I said: [%d]\n", value);
-        // ROS_INFO(node, "%s\n", buf);
+        cRosMessageSetFieldValueString(&data_field, buf);
+
+        return 0;
+    }
+
+    static CallbackResponse callback_output_1(cRosMessage *message, void* data_context){
+        char buf[1024];
+        cRosMessageField *data_field;
+        data_field = cRosMessageGetField(message, "data");
+        uint64_t value;
+        uint32_t data;
+        cpu_physical_memory_read(0x40011000 + 0x0c, &data, 4);
+        value = (data >> 14) & 0b1;// tswap32(data);
+        char str[20];
+        sprintf(str, "%d", value);
+        data_field->data.as_string = str;
+
+        cRosMessageSetFieldValueString(&data_field, buf);
+        
         return 0;
     }
 
@@ -2110,10 +2212,10 @@ static int set_signal_handler(void) {
 int main_loop_ros() {
     char path[4097];  // We need to tell our node where to find the .msg files that we'll be using
     const char * node_name;
-    int pubidx, subidx;  // Index (identifier) of the created subscriber
+    int pubidx_0, pubidx_1, subidx_0, subidx_1, subidx_2, subidx_3, subidx_4;  // Index (identifier) of the created subscriber
     cRosErrCodePack err_cod;
 
-    node_name = "/dd";  // Default node name if no command-line parameters are specified
+    node_name = "/bluepill";  // Default node name if no command-line parameters are specified
 
     getcwd(path, sizeof(path));
     strncat(path, DIR_SEPARATOR_STR "rosdb", sizeof(path) - strlen(path) - 1);
@@ -2138,10 +2240,14 @@ int main_loop_ros() {
 
     // Create a service provider named /sum of type "roscpp_tutorials/TwoInts" and supply a callback for received calls
     // err_cod = cRosApiRegisterSubscriber(node, "/chatter", "std_msgs/String", callback_sub, NULL, NULL, 0, &subidx);
-    err_cod = cRosApiRegisterSubscriber(node, "/range/distance_sensor", "std_msgs/Int32", callback_range, NULL, NULL, 0,
-                                        &subidx);
+    err_cod = cRosApiRegisterSubscriber(node, "/input_0", "std_msgs/Int32", callback_input_0, NULL, NULL, 0, &subidx_0);
+    err_cod = cRosApiRegisterSubscriber(node, "/input_1", "std_msgs/Int32", callback_input_1, NULL, NULL, 0, &subidx_1);
+    err_cod = cRosApiRegisterSubscriber(node, "/input_2", "std_msgs/Int32", callback_input_2, NULL, NULL, 0, &subidx_2);
+    err_cod = cRosApiRegisterSubscriber(node, "/input_3", "std_msgs/Int32", callback_input_3, NULL, NULL, 0, &subidx_3);
+    err_cod = cRosApiRegisterSubscriber(node, "/input_4", "std_msgs/Int32", callback_input_4, NULL, NULL, 0, &subidx_4);
 
-    err_cod = cRosApiRegisterPublisher(node, "/PWM_TEST","std_msgs/String", 1000, callback_pub, NULL, NULL, &pubidx);
+    err_cod = cRosApiRegisterPublisher(node, "/output_0","std_msgs/String", 100, callback_output_0, NULL, NULL, &pubidx_0);
+    err_cod = cRosApiRegisterPublisher(node, "/output_1","std_msgs/String", 100, callback_output_1, NULL, NULL, &pubidx_1);
 
     if (err_cod != CROS_SUCCESS_ERR_PACK) {
         cRosPrintErrCodePack(err_cod,
