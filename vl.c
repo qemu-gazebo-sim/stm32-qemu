@@ -2024,7 +2024,6 @@ static unsigned char exit_flag = 0; //! ROS node loop exit flag. When set to 1 t
 static CallbackResponse callback_input_0(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
-    // printf("entrei na callback_range");
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
@@ -2047,7 +2046,6 @@ static CallbackResponse callback_input_0(cRosMessage * message, void* data_conte
 static CallbackResponse callback_input_1(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
-    // printf("entrei na callback_range");
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
@@ -2070,7 +2068,6 @@ static CallbackResponse callback_input_1(cRosMessage * message, void* data_conte
 static CallbackResponse callback_input_2(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
-    // printf("entrei na callback_range");
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
@@ -2093,7 +2090,6 @@ static CallbackResponse callback_input_2(cRosMessage * message, void* data_conte
 static CallbackResponse callback_input_3(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
-    // printf("entrei na callback_range");
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
@@ -2116,7 +2112,6 @@ static CallbackResponse callback_input_3(cRosMessage * message, void* data_conte
 static CallbackResponse callback_input_4(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
-    // printf("entrei na callback_range");
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
@@ -2140,7 +2135,7 @@ static CallbackResponse callback_input_4(cRosMessage * message, void* data_conte
         char buf[1024];
         cRosMessageField *data_field;
         data_field = cRosMessageGetField(message, "data");
-        uint64_t value;
+        uint32_t value;
         uint32_t data;
         cpu_physical_memory_read(0x40011000 + 0x0c, &data, 4);
         value = (data >> 13) & 0b1;
@@ -2157,7 +2152,7 @@ static CallbackResponse callback_input_4(cRosMessage * message, void* data_conte
         char buf[1024];
         cRosMessageField *data_field;
         data_field = cRosMessageGetField(message, "data");
-        uint64_t value;
+        uint32_t value;
         uint32_t data;
         cpu_physical_memory_read(0x40011000 + 0x0c, &data, 4);
         value = (data >> 14) & 0b1;// tswap32(data);
@@ -2166,7 +2161,7 @@ static CallbackResponse callback_input_4(cRosMessage * message, void* data_conte
         data_field->data.as_string = str;
 
         cRosMessageSetFieldValueString(&data_field, buf);
-        
+
         return 0;
     }
 
