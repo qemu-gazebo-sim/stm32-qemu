@@ -2029,48 +2029,44 @@ static CallbackResponse callback_range(cRosMessage * message, void* data_context
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
             ROS_INFO(node, "I heard: [%d]\n", range);
-            // DeviceState *dev;
-            // qemu_irq irq;
-            // unsigned n, level;
-            // const char word_1[] = "/machine/stm32/gpio[b]";
-            // // const char word_2[] = '9';
-            // // const char word_3[] = (new_range > 0) ? "raise": "lower";
 
-            // g_assert(word_1);
-            // dev = DEVICE(object_resolve_path(word_1, NULL));
-
-            // // g_assert(word_2);
-            // // n = strtoul(word_2, NULL, 0);
-            // irq = qdev_get_gpio_in(dev, 9);
-
-            // // g_assert(&word_3);
-            // if (new_range == 0) {
-            //     level = 0;
-            // } else {
-            //     level = 1;
-            // }
-            // qemu_set_irq(irq, level);
-            // set_irq_in("/machine/stm32/gpio[a]", 0, 1);
             gchar **words1;
             gchar **words2;
             words1 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 9 lower", " ", 0);
             words2 = g_strsplit("set_irq_in /machine/stm32/gpio[b] 9 raise", " ", 0);
-            // if (range == 0) {
-            //     gchar words[][] = {"set_irq_in","/machine/stm32/gpio[a]","lower"};
-            // } else {
-            //     gchar words[][] = {"set_irq_in","/machine/stm32/gpio[a]","raise"};
-            // }
-            // qtest_process_command(chr, words);
+
             (new_range == 0) ? qtest_process_command(chr_aaaa, words1) : qtest_process_command(chr_aaaa, words2);
             range = new_range; 
-            // CharDriverState *chr;
-            // qtest_send(chr, "OK\n");
+
         }
-        // ROS_INFO(node, "I heard: [%d]\n", range);
     }
 
-    return 0;  // 0=success
+    return 0;
 }
+
+    static CallbackResponse callback_pub(cRosMessage *message, void* data_context){
+          char buf[1024];
+          cRosMessageField *data_field;
+          data_field = cRosMessageGetField(message, "data");
+            uint64_t value;
+            uint32_t data;
+            cpu_physical_memory_read(0x40010c00 + 0x08, &data, 4);
+            value = data;// tswap32(data);
+        //   data_field.name = "data";
+        char str[20];
+        sprintf(str, "%d", value);
+          data_field->data.as_string = str;
+        // data_field->data.as_msg = 1;
+          cRosMessageSetFieldValueString(&data_field, buf);
+
+        // gchar **words3;
+        // words3 = g_strsplit("readl 0x40010808", " ", 0);
+        // qtest_process_command(chr_aaaa, words3);
+        //   uint32_t value = readl(0x40010800 + 0x08);
+        //   ROS_INFO(node, "I said: [%d]\n", value);
+        // ROS_INFO(node, "%s\n", buf);
+        return 0;
+    }
 
 struct sigaction old_int_signal_handler, old_term_signal_handler;  //! Structures codifying the original handlers of SIGINT and SIGTERM signals (e.g. used when pressing Ctrl-C for the second time);
 
@@ -2112,38 +2108,9 @@ static int set_signal_handler(void) {
 
 
 int main_loop_ros() {
-
-    // DeviceState *dev;
-    // NamedGPIOList *ngl;
-    // int id;
-
-    // const char word_1[] = "/machine/stm32/gpio[b]";
-    // // const char word_2[] = '9';
-
-    // g_assert(word_1);
-    // dev = DEVICE(object_resolve_path(word_1, NULL));
-
-    // // g_assert(word_2);
-    // id = 9; // strtoul(word_2, NULL, 0);
-
-    // QLIST_FOREACH(ngl, &dev->gpios, node) {
-    //     /* We don't support intercept of named GPIOs yet */
-    //     if (ngl->name) {
-    //         continue;
-    //     }
-    //     // if (words[0][14] == 'o') {
-    //     //     qemu_irq_intercept_out(&ngl->out, qtest_irq_handler,
-    //     //                             id, ngl->num_out);
-    //     // } else {
-    //         qemu_irq_intercept_in(ngl->in, qtest_irq_handler,
-    //                                 id, ngl->num_in);
-    //     // }
-    // }
-
-
     char path[4097];  // We need to tell our node where to find the .msg files that we'll be using
     const char * node_name;
-    int subidx;  // Index (identifier) of the created subscriber
+    int pubidx, subidx;  // Index (identifier) of the created subscriber
     cRosErrCodePack err_cod;
 
     node_name = "/dd";  // Default node name if no command-line parameters are specified
@@ -2173,6 +2140,8 @@ int main_loop_ros() {
     // err_cod = cRosApiRegisterSubscriber(node, "/chatter", "std_msgs/String", callback_sub, NULL, NULL, 0, &subidx);
     err_cod = cRosApiRegisterSubscriber(node, "/range/distance_sensor", "std_msgs/Int32", callback_range, NULL, NULL, 0,
                                         &subidx);
+
+    err_cod = cRosApiRegisterPublisher(node, "/PWM_TEST","std_msgs/String", 1000, callback_pub, NULL, NULL, &pubidx);
 
     if (err_cod != CROS_SUCCESS_ERR_PACK) {
         cRosPrintErrCodePack(err_cod,
@@ -2218,7 +2187,7 @@ static void *thread_1() {
 
 static void main_loop(void)
 {
-    // ps_init();
+
     pthread_t thread;
     pthread_create(&thread, NULL, thread_1, NULL);
 
