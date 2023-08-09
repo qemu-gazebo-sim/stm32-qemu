@@ -2139,9 +2139,7 @@ static CallbackResponse callback_input_4(cRosMessage * message, void* data_conte
         uint32_t data;
         cpu_physical_memory_read(0x40011000 + 0x0c, &data, 4);
         value = (data >> 13) & 0b1;
-        char str[20];
-        sprintf(str, "%d", value);
-        data_field->data.as_string = str;
+        data_field->data.as_uint32 = value;
 
         cRosMessageSetFieldValueString(&data_field, buf);
 
@@ -2156,9 +2154,7 @@ static CallbackResponse callback_input_4(cRosMessage * message, void* data_conte
         uint32_t data;
         cpu_physical_memory_read(0x40011000 + 0x0c, &data, 4);
         value = (data >> 14) & 0b1;// tswap32(data);
-        char str[20];
-        sprintf(str, "%d", value);
-        data_field->data.as_string = str;
+        data_field->data.as_uint32 = value;
 
         cRosMessageSetFieldValueString(&data_field, buf);
 
@@ -2241,8 +2237,8 @@ int main_loop_ros() {
     err_cod = cRosApiRegisterSubscriber(node, "/input_3", "std_msgs/Int32", callback_input_3, NULL, NULL, 0, &subidx_3);
     err_cod = cRosApiRegisterSubscriber(node, "/input_4", "std_msgs/Int32", callback_input_4, NULL, NULL, 0, &subidx_4);
 
-    err_cod = cRosApiRegisterPublisher(node, "/output_0","std_msgs/String", 100, callback_output_0, NULL, NULL, &pubidx_0);
-    err_cod = cRosApiRegisterPublisher(node, "/output_1","std_msgs/String", 100, callback_output_1, NULL, NULL, &pubidx_1);
+    err_cod = cRosApiRegisterPublisher(node, "/output_0","std_msgs/Int32", 100, callback_output_0, NULL, NULL, &pubidx_0);
+    err_cod = cRosApiRegisterPublisher(node, "/output_1","std_msgs/Int32", 100, callback_output_1, NULL, NULL, &pubidx_1);
 
     if (err_cod != CROS_SUCCESS_ERR_PACK) {
         cRosPrintErrCodePack(err_cod,
