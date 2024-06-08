@@ -214,7 +214,7 @@ static void qtest_irq_handler(void *opaque, int n, int level)
                level ? "raise" : "lower", intercept_data->id, n);
 }
 
-static void qtest_process_command(CharDriverState *chr, gchar **words)
+void qtest_process_command(CharDriverState *chr, gchar **words)
 {
     const gchar *command;
 

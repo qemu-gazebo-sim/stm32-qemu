@@ -1,6 +1,10 @@
 #!/bin/sh
 
-QEMU=/home/vanderson/Desktop/codes/tcc/stm32-qemu/build/arm-softmmu/qemu-system-arm
+# QEMU=/home/vanderson/Desktop/codes/tcc/stm32-qemu/build/arm-softmmu/qemu-system-arm
+STM32_QEMU_PATH=$(pwd)
+BLUEPILL_PURSUER_PATH=$(pwd)/../bluepill_pursuer
+QEMU_REL=build/arm-softmmu/qemu-system-arm
+QEMU=$STM32_QEMU_PATH/$QEMU_REL
 
 get_qemu_version() {
 	"$QEMU" --version | perl -ne 'print $1 if /version (\S+)/'
@@ -64,14 +68,17 @@ SERIAL="$SERIAL -curses"
 SERIAL="$SERIAL -serial stdio"
 #SERIAL="$SERIAL -monitor stdio"
 
-cd /home/vanderson/Desktop/codes/tcc/stm32-qemu/build
+# cd /home/vanderson/Desktop/codes/tcc/stm32-qemu/build
+cd $STM32_QEMU_PATH/build
 make -j
-cd /home/vanderson/Desktop/codes/tcc/stm32-qemu
+cd $STM32_QEMU_PATH
+# cd /home/vanderson/Desktop/codes/tcc/stm32-qemu
 "$QEMU"                                                   \
 	-machine stm32-f103c8                                   \
-	-kernel /home/vanderson/Desktop/codes/tcc/bluepill_gpio_sim/build/bluepill_gpio_sim_v1.bin \
+	-kernel $BLUEPILL_PURSUER_PATH/build/bluepill_gpio_sim_v1.bin \
 	-d guest_errors \
 	$NETPARAMS \
+	# -kernel /home/vanderson/Desktop/codes/tcc/bluepill_gpio_sim/build/bluepill_gpio_sim_v1.bin \
 	# $LOGPARAMS \
 	# $QTESTPARAMS \
 	# -s \
@@ -83,7 +90,7 @@ cd /home/vanderson/Desktop/codes/tcc/stm32-qemu
 	# $LOGPARAMS                                        \
 	# -nographic \
 	# -curses                                           \
-	# $SERIAL                                           \ 
+	# $SERIAL                                           \
 	# -board BluePill \
 	# -mcu STM32F103C8 \
 	# -dtb     "$ROOTFS/bcm2710-rpi-3-b-plus.dtb"       \
