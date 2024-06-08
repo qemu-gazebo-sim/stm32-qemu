@@ -1,33 +1,33 @@
 [submodule "roms/vgabios"]
 	path = roms/vgabios
-	url = https://github.com/qemu/vgabios.git
+	url = git@github.com:qemu/vgabios.git
 [submodule "roms/seabios"]
 	path = roms/seabios
-	url = https://github.com/coreboot/seabios.git
+	url = git@github.com:coreboot/seabios.git
 [submodule "roms/SLOF"]
 	path = roms/SLOF
-	url = https://github.com/qemu/SLOF.git
+	url = git@github.com:qemu/SLOF.git
 [submodule "roms/ipxe"]
 	path = roms/ipxe
-	url = https://github.com/ipxe/ipxe.git
+	url = git@github.com:ipxe/ipxe.git
 [submodule "roms/openbios"]
 	path = roms/openbios
-	url = https://github.com/openbios/openbios.git
+	url = git@github.com:openbios/openbios.git
 [submodule "roms/openhackware"]
 	path = roms/openhackware
-	url = https://github.com/qemu/openhackware.git
+	url = git@github.com:qemu/openhackware.git
 [submodule "roms/qemu-palcode"]
 	path = roms/qemu-palcode
-	url = https://github.com/qemu/qemu-palcode.git
+	url = git@github.com:qemu/qemu-palcode.git
 [submodule "roms/sgabios"]
 	path = roms/sgabios
-	url = https://github.com/qemu/sgabios.git
+	url = git@github.com:qemu/sgabios.git
 [submodule "pixman"]
 	path = pixman
 	url = git://anongit.freedesktop.org/pixman
 [submodule "dtc"]
 	path = dtc
-	url = https://github.com/qemu/dtc.git
+	url = git@github.com:qemu/dtc.git
 [submodule "roms/u-boot"]
 	path = roms/u-boot
-	url = https://github.com/u-boot/u-boot.git
+	url = git@github.com:u-boot/u-boot.git
