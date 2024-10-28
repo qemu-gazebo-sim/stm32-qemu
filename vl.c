@@ -2021,7 +2021,7 @@ static unsigned char exit_flag = 0; //! ROS node loop exit flag. When set to 1 t
 
 
 // This callback will be invoked when the service provider receives a service call
-static CallbackResponse callback_input_0(cRosMessage * message, void* data_context) {
+static CallbackResponse callback_distance_sensor_0(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
     if (range_field != NULL) {
@@ -2043,7 +2043,7 @@ static CallbackResponse callback_input_0(cRosMessage * message, void* data_conte
     return 0;
 }
 
-static CallbackResponse callback_input_1(cRosMessage * message, void* data_context) {
+static CallbackResponse callback_distance_sensor_1(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
     if (range_field != NULL) {
@@ -2065,7 +2065,7 @@ static CallbackResponse callback_input_1(cRosMessage * message, void* data_conte
     return 0;
 }
 
-static CallbackResponse callback_input_2(cRosMessage * message, void* data_context) {
+static CallbackResponse callback_distance_sensor_2(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
     if (range_field != NULL) {
@@ -2087,7 +2087,7 @@ static CallbackResponse callback_input_2(cRosMessage * message, void* data_conte
     return 0;
 }
 
-static CallbackResponse callback_input_3(cRosMessage * message, void* data_context) {
+static CallbackResponse callback_distance_sensor_3(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
     if (range_field != NULL) {
@@ -2109,7 +2109,7 @@ static CallbackResponse callback_input_3(cRosMessage * message, void* data_conte
     return 0;
 }
 
-static CallbackResponse callback_input_4(cRosMessage * message, void* data_context) {
+static CallbackResponse callback_distance_sensor_4(cRosMessage * message, void* data_context) {
     cRosMessageField * range_field = cRosMessageGetField(message, "data");
     static int32_t range = 0;
     if (range_field != NULL) {
@@ -2130,7 +2130,9 @@ static CallbackResponse callback_input_4(cRosMessage * message, void* data_conte
 
     return 0;
 }
+    
 
+    // Ros Outputs 
     static CallbackResponse callback_output_0(cRosMessage *message, void* data_context){
         char buf[1024];
         cRosMessageField *data_field;
@@ -2231,11 +2233,11 @@ int main_loop_ros() {
 
     // Create a service provider named /sum of type "roscpp_tutorials/TwoInts" and supply a callback for received calls
     // err_cod = cRosApiRegisterSubscriber(node, "/chatter", "std_msgs/String", callback_sub, NULL, NULL, 0, &subidx);
-    err_cod = cRosApiRegisterSubscriber(node, "/input_0", "std_msgs/Int32", callback_input_0, NULL, NULL, 0, &subidx_0);
-    err_cod = cRosApiRegisterSubscriber(node, "/input_1", "std_msgs/Int32", callback_input_1, NULL, NULL, 0, &subidx_1);
-    err_cod = cRosApiRegisterSubscriber(node, "/input_2", "std_msgs/Int32", callback_input_2, NULL, NULL, 0, &subidx_2);
-    err_cod = cRosApiRegisterSubscriber(node, "/input_3", "std_msgs/Int32", callback_input_3, NULL, NULL, 0, &subidx_3);
-    err_cod = cRosApiRegisterSubscriber(node, "/input_4", "std_msgs/Int32", callback_input_4, NULL, NULL, 0, &subidx_4);
+    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_0", "std_msgs/Int32", callback_distance_sensor_0, NULL, NULL, 0, &subidx_0);
+    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_1", "std_msgs/Int32", callback_distance_sensor_1, NULL, NULL, 0, &subidx_1);
+    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_2", "std_msgs/Int32", callback_distance_sensor_2, NULL, NULL, 0, &subidx_2);
+    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_3", "std_msgs/Int32", callback_distance_sensor_3, NULL, NULL, 0, &subidx_3);
+    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_4", "std_msgs/Int32", callback_distance_sensor_4, NULL, NULL, 0, &subidx_4);
 
     err_cod = cRosApiRegisterPublisher(node, "/output_0","std_msgs/Int32", 100, callback_output_0, NULL, NULL, &pubidx_0);
     err_cod = cRosApiRegisterPublisher(node, "/output_1","std_msgs/Int32", 100, callback_output_1, NULL, NULL, &pubidx_1);
