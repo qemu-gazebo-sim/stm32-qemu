@@ -33,7 +33,7 @@
 #define CN_MAX_PUBLISHED_TOPICS 5
 
 /*! Max num subscribed topics */
-#define CN_MAX_SUBSCRIBED_TOPICS 5
+#define CN_MAX_SUBSCRIBED_TOPICS 10
 
 /*! Max num service providers */
 #define CN_MAX_SERVICE_PROVIDERS 8
