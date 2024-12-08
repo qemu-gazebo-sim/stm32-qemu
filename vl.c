@@ -2364,10 +2364,10 @@ int main_loop_ros() {
     err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_2", "std_msgs/Int32", callback_distance_sensor_2, NULL, NULL, 0, &subidx_1);
     err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_3", "std_msgs/Int32", callback_distance_sensor_3, NULL, NULL, 0, &subidx_2);
     err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_4", "std_msgs/Int32", callback_distance_sensor_4, NULL, NULL, 0, &subidx_3);
-    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_5", "std_msgs/Int32", callback_distance_sensor_1, NULL, NULL, 0, &subidx_4);
-    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_6", "std_msgs/Int32", callback_distance_sensor_2, NULL, NULL, 0, &subidx_5);
-    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_7", "std_msgs/Int32", callback_distance_sensor_3, NULL, NULL, 0, &subidx_6);
-    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_8", "std_msgs/Int32", callback_distance_sensor_4, NULL, NULL, 0, &subidx_7);
+    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_5", "std_msgs/Int32", callback_distance_sensor_5, NULL, NULL, 0, &subidx_4);
+    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_6", "std_msgs/Int32", callback_distance_sensor_6, NULL, NULL, 0, &subidx_5);
+    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_7", "std_msgs/Int32", callback_distance_sensor_7, NULL, NULL, 0, &subidx_6);
+    err_cod = cRosApiRegisterSubscriber(node, "/distance_sensor_8", "std_msgs/Int32", callback_distance_sensor_8, NULL, NULL, 0, &subidx_7);
 
     err_cod = cRosApiRegisterSubscriber(node, "/encoder_left", "std_msgs/Int32", callback_encoder_left, NULL, NULL, 0, &subidx_8);
     err_cod = cRosApiRegisterSubscriber(node, "/encoder_right", "std_msgs/Int32", callback_encoder_right, NULL, NULL, 0, &subidx_9);
