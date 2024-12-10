@@ -2027,7 +2027,7 @@ static CallbackResponse callback_distance_sensor_1(cRosMessage * message, void* 
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
-            ROS_INFO(node, "I heard gpio[a] 4: [%d]\n", range);
+            // ROS_INFO(node, "I heard gpio[a] 4: [%d]\n", range);
 
             gchar **words1;
             gchar **words2;
@@ -2049,7 +2049,7 @@ static CallbackResponse callback_distance_sensor_2(cRosMessage * message, void* 
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
-            ROS_INFO(node, "I heard gpio[a] 5: [%d]\n", range);
+            // ROS_INFO(node, "I heard gpio[a] 5: [%d]\n", range);
 
             gchar **words1;
             gchar **words2;
@@ -2071,7 +2071,7 @@ static CallbackResponse callback_distance_sensor_3(cRosMessage * message, void* 
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
-            ROS_INFO(node, "I heard gpio[a] 6: [%d]\n", range);
+            // ROS_INFO(node, "I heard gpio[a] 6: [%d]\n", range);
 
             gchar **words1;
             gchar **words2;
@@ -2092,7 +2092,7 @@ static CallbackResponse callback_distance_sensor_4(cRosMessage * message, void* 
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
-            ROS_INFO(node, "I heard gpio[a] 7: [%d]\n", range);
+            // ROS_INFO(node, "I heard gpio[a] 7: [%d]\n", range);
 
             gchar **words1;
             gchar **words2;
@@ -2114,7 +2114,7 @@ static CallbackResponse callback_distance_sensor_5(cRosMessage * message, void* 
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
-            ROS_INFO(node, "I heard gpio[b] 0: [%d]\n", range);
+            // ROS_INFO(node, "I heard gpio[b] 0: [%d]\n", range);
 
             gchar **words1;
             gchar **words2;
@@ -2136,7 +2136,7 @@ static CallbackResponse callback_distance_sensor_6(cRosMessage * message, void* 
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
-            ROS_INFO(node, "I heard gpio[b] 1: [%d]\n", range);
+            // ROS_INFO(node, "I heard gpio[b] 1: [%d]\n", range);
 
             gchar **words1;
             gchar **words2;
@@ -2158,7 +2158,7 @@ static CallbackResponse callback_distance_sensor_7(cRosMessage * message, void* 
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
-            ROS_INFO(node, "I heard gpio[b] 10: [%d]\n", range);
+            // ROS_INFO(node, "I heard gpio[b] 10: [%d]\n", range);
 
             gchar **words1;
             gchar **words2;
@@ -2180,7 +2180,7 @@ static CallbackResponse callback_distance_sensor_8(cRosMessage * message, void* 
     if (range_field != NULL) {
         int32_t new_range = range_field->data.as_int32;
         if (new_range != range) {
-            ROS_INFO(node, "I heard gpio[b] 11: [%d]\n", range);
+            // ROS_INFO(node, "I heard gpio[b] 11: [%d]\n", range);
 
             gchar **words1;
             gchar **words2;
@@ -2202,7 +2202,7 @@ static CallbackResponse callback_encoder_left(cRosMessage * message, void* data_
     if (encoder_value_field != NULL) {
         int32_t new_encoder_value = encoder_value_field->data.as_int32;
         if (new_encoder_value != encoder_value) {
-            ROS_INFO(node, "I heard for encoder left: [%d]\n\n", new_encoder_value);
+            // ROS_INFO(node, "I heard for encoder left: [%d]\n\n", new_encoder_value);
             encoder_value = new_encoder_value; 
 
             int bit_0 = new_encoder_value & 1;        
@@ -2214,7 +2214,7 @@ static CallbackResponse callback_encoder_left(cRosMessage * message, void* data_
             gchar **word_bit_0;
             gchar **word_bit_1;
             gchar **word_bit_2;
-
+            // ROS_INFO(node, "I heard for encoder left the following bits: bit_0: [%d] bit_1: [%d]  bit_2: [%d]\n\n", bit_0, bit_1, bit_2);
             word_bit_0 = bit_0 == 0 ? g_strsplit("set_irq_in /machine/stm32/gpio[b] 7 lower", " ", 0) : g_strsplit("set_irq_in /machine/stm32/gpio[b] 7 raise", " ", 0);
             word_bit_1 = bit_1 == 0 ? g_strsplit("set_irq_in /machine/stm32/gpio[b] 6 lower", " ", 0) : g_strsplit("set_irq_in /machine/stm32/gpio[b] 6 raise", " ", 0);
             word_bit_2 = bit_2 == 0 ? g_strsplit("set_irq_in /machine/stm32/gpio[b] 5 lower", " ", 0) : g_strsplit("set_irq_in /machine/stm32/gpio[b] 5 raise", " ", 0);
@@ -2233,7 +2233,7 @@ static CallbackResponse callback_encoder_right(cRosMessage * message, void* data
     if (encoder_value_field != NULL) {
         int32_t new_encoder_value = encoder_value_field->data.as_int32;
         if (new_encoder_value != encoder_value) {
-            ROS_INFO(node, "I heard for encoder right: [%d]\n\n", new_encoder_value);
+            // ROS_INFO(node, "I heard for encoder right: [%d]\n\n", new_encoder_value);
             encoder_value = new_encoder_value; 
 
             int bit_0 = new_encoder_value & 1;        
@@ -2265,11 +2265,16 @@ static CallbackResponse callback_encoder_right(cRosMessage * message, void* data
         cRosMessageField *data_field;
         data_field = cRosMessageGetField(message, "data");
         uint32_t value;
+        uint32_t inverted_value;
         uint32_t data;
         cpu_physical_memory_read(0x40010C00 + 0x0c, &data, 4);
-        value = (data >> 5) & 0b111;
+        inverted_value = (data >> 5) & 0b111;
+        uint8_t bit_3 = (inverted_value & 0b001) << 2;
+        uint8_t bit_2 = inverted_value & 0b010;
+        uint8_t bit_1 = (inverted_value & 0b100) >> 2;
+        value = bit_3 | bit_2 | bit_1; 
         data_field->data.as_uint32 = value;
-
+        ROS_INFO(node, "Left motor publish value: [%d]\n", value);
         cRosMessageSetFieldValueString(&data_field, buf);
 
         return 0;
@@ -2282,7 +2287,8 @@ static CallbackResponse callback_encoder_right(cRosMessage * message, void* data
         uint32_t value;
         uint32_t data;
         cpu_physical_memory_read(0x40010800 + 0x0c, &data, 4);
-        value = (data >> 1) & 0b111;// tswap32(data);
+        value = (data >> 1) & 0b111;
+        ROS_INFO(node, "Right motor publish value: [%d]\n", value);
         data_field->data.as_uint32 = value;
 
         cRosMessageSetFieldValueString(&data_field, buf);
