@@ -32,11 +32,6 @@ if check_version_at_least "5.1.0"; then
 	NETPARAMS="$NETPARAMS -netdev user,id=net0,hostfwd=tcp:127.0.0.1:11311-:11311"
 fi
 
-QTESTPARAMS=""
-if $ENABLEQTEST; then
-	QTESTPARAMS="$QTESTPARAMS -qtest unix:$QTESTSOCKET"
-fi
-
 
 LOGPARAMS=""
 if $LOGPARAMS; then
@@ -48,11 +43,12 @@ cd $STM32_QEMU_PATH/build
 make -j
 cd $STM32_QEMU_PATH
 
+# -s shorthand for -gdb tcp::1234
+# -S freeze CPU at startup (use 'c' to start execution)
 "$QEMU"                                                   \
 	-machine $MACHINE_NAME                                  \
 	-kernel $BLUEPILL_PURSUER_PATH/build/bluepill_gpio_sim_v1.bin \
 	$NETPARAMS \
 	$LOGPARAMS \
-	# $QTESTPARAMS \
 	# -s \
 	# -S \
