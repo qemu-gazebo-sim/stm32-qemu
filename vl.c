@@ -2414,7 +2414,7 @@ int main_loop_ros() {
 
 #include <pthread.h>
 
-static void *thread_1() {
+static void *thread_ros() {
     main_loop_ros();
 
     return NULL;
@@ -2427,7 +2427,7 @@ static void main_loop(void)
 {
 
     pthread_t thread;
-    pthread_create(&thread, NULL, thread_1, NULL);
+    pthread_create(&thread, NULL, thread_ros, NULL);
 
     bool nonblocking;
     int last_io = 0;
